@@ -2,16 +2,27 @@ import React from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
+import PropTypes from "prop-types";
 //im,portar botones
 import { Link } from "react-router-dom";
 //Importar el Spinner
 import Spinner from "../layout/Spinner";
 
-const Suscriptores = ({ suscriptores }) => {
-  console.log(suscriptores);
-
+const Suscriptores = ({ suscriptores, firestore }) => {
   if (!suscriptores) return <Spinner />;
 
+  //Eliminar Suscriptores
+  const eliminarSuscriptor = id => {
+    // Eliminar
+    firestore
+      .delete({
+        collection: "suscriptores",
+        doc: id
+      })
+      .then(() => {
+        alert("Elimado");
+      });
+  };
   return (
     <div className="row">
       <div className="col-md-12 mb-4">
@@ -48,6 +59,13 @@ const Suscriptores = ({ suscriptores }) => {
                   <i className="fas fa-angle-double-right"></i> {""}
                   Mas Info..
                 </Link>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-block"
+                  onClick={() => eliminarSuscriptor(suscriptor.id)}
+                >
+                  <i className="fas fa-trash-alt"></i> {""} Eliminar
+                </button>
               </td>
             </tr>
           ))}
@@ -55,6 +73,10 @@ const Suscriptores = ({ suscriptores }) => {
       </table>
     </div>
   );
+};
+Suscriptores.propTypes = {
+  firestore: PropTypes.object.isRequired,
+  suscriptores: PropTypes.array
 };
 
 export default compose(
