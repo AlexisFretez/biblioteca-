@@ -40,7 +40,10 @@ const Suscriptores = ({ suscriptores, firestore }) => {
         <thead className="text-light bg-primary">
           <tr>
             <th>Nombre</th>
+            <th>Curso</th>
             <th>Carrera</th>
+            <th>Codigo</th>
+            <th>Telefono</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -50,18 +53,22 @@ const Suscriptores = ({ suscriptores, firestore }) => {
               <td>
                 {suscriptor.nombre} {suscriptor.apellido}
               </td>
+              <td>{suscriptor.curso}</td>
               <td>{suscriptor.carrera}</td>
+              <td>{suscriptor.codigo}</td>
+              <td>{suscriptor.telefono}</td>
               <td>
                 <Link
                   to={`/suscriptores/mostrar/${suscriptor.id}`}
-                  className="btn btn-info btn-block"
+                  className="btn btn-info"
                 >
                   <i className="fas fa-angle-double-right"></i> {""}
                   Mas Info..
-                </Link>
+                </Link>{" "}
+                {""}
                 <button
                   type="button"
-                  className="btn btn-danger btn-block"
+                  className="btn btn-danger"
                   onClick={() => eliminarSuscriptor(suscriptor.id)}
                 >
                   <i className="fas fa-trash-alt"></i> {""} Eliminar

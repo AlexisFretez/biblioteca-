@@ -10,6 +10,8 @@ class NuevoSuscriptor extends Component {
     nombre: "",
     apellido: "",
     carrera: "",
+    curso: "",
+    telefono: "",
     codigo: ""
   };
   //Agregar u nuevo Suscriptor a la BD
@@ -82,6 +84,20 @@ class NuevoSuscriptor extends Component {
                 </div>
                 <div className="form-group">
                   <strong>
+                    <label>Curso</label>
+                  </strong>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="curso"
+                    placeholder="Curso del Suscriptor"
+                    required
+                    onChange={this.leerDato}
+                    value={this.state.curso}
+                  />
+                </div>
+                <div className="form-group">
+                  <strong>
                     <label>Carrera</label>
                   </strong>
                   <input
@@ -92,6 +108,20 @@ class NuevoSuscriptor extends Component {
                     required
                     onChange={this.leerDato}
                     value={this.state.carrera}
+                  />
+                </div>
+                <div className="form-group">
+                  <strong>
+                    <label>Telefono</label>
+                  </strong>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="telefono"
+                    placeholder="Telefono del Suscriptor"
+                    required
+                    onChange={this.leerDato}
+                    value={this.state.telefono}
                   />
                 </div>
                 <div className="form-group">
