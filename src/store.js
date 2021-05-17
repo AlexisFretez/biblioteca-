@@ -4,6 +4,11 @@ import { reduxFirestore, firestoreReducer } from "redux-firestore";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+/**
+ * Custom Reducers 
+ */
+import buscarUsuarioReducer from './reducesrs/buscarUsuarioReducer'
+
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -35,7 +40,8 @@ const createStoreWithFirebase = compose(
 // Reducers
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
-  firestore: firestoreReducer
+  firestore: firestoreReducer,
+  usuario : buscarUsuarioReducer
 });
 
 // state inicial
