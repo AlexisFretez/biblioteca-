@@ -5,6 +5,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
+import swal from 'sweetalert'
 
 class EditarLibro extends Component {
     
@@ -16,6 +17,11 @@ class EditarLibro extends Component {
 
     // Actualiza el Libro en firestore
     actualizarLibro = e => {
+        swal({
+            title: "Good job!",
+            text: "Editado con Exito!",
+            icon: "success",
+          });
         e.preventDefault();
 
         // construir el nuevo objeto

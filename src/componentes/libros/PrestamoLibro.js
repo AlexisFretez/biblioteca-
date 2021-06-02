@@ -10,6 +10,7 @@ import FichaSuscriptor from '../suscriptores/FichaSuscriptor';
 
 // redux actions 
 import { buscarUsuario } from '../../actions/buscarUsuarioActions';
+import swal from 'sweetalert'
 
 
 class PrestamoLibro extends Component {
@@ -30,8 +31,8 @@ class PrestamoLibro extends Component {
         //hacer la consulta
         const coleccion = firestore.collection('suscriptores');
         const consulta = coleccion.where("codigo", "==", busqueda).get();
-
-
+        //Limpia el Input
+        e.target.reset()
         //leer los resultados
         consulta.then(resultado =>{
             if(resultado.empty){
@@ -42,6 +43,7 @@ class PrestamoLibro extends Component {
                 //actualiza el state en base si hay resulatdos
                 this.setState({
                     noResultados: true
+                   
                 });
             }else{
                 //si hay resultado
@@ -101,6 +103,8 @@ class PrestamoLibro extends Component {
             collection: 'libros',
             doc: libro.id
         }, libro).then(history.push('/'));
+        swal("Good job!", "Has creado un nuevo !", "success");
+        usuario.nombre = '';
         
     }
 
@@ -126,7 +130,7 @@ class PrestamoLibro extends Component {
             />
             btnSolicitar = <button
                                 type="button"
-                                className="btn btn-primary btn-block"
+                                className="btn btn-info btn-block"
                                 onClick={this.solicitarPrestamo}
                                 >Solicitar Prestamo</button>
         }else{
@@ -151,7 +155,7 @@ class PrestamoLibro extends Component {
         return ( 
             <div className="row">
                 <div className="col-12 mb-4">
-                    <Link to={"/suscriptores"} className="btn btn-secondary">
+                    <Link to={"/"} className="btn btn-secondary">
                         <i className="fas fa-arrow-circle-left"></i> {""}
                         Volver al Listado
                     </Link>

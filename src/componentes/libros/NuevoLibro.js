@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import PropTypes from 'prop-types';
+import swal from 'sweetalert'
 
 class NuevoLibro extends Component {
     state = { 
@@ -13,6 +14,11 @@ class NuevoLibro extends Component {
 
      // guardar el libro en la base de datos
      agregarLibro = e => {
+        swal({
+            title: "Good job!",
+            text: "Has Ingresado un nuevo Libro!",
+            icon: "success",
+          });
          e.preventDefault();
 
          // tomar una copia del state

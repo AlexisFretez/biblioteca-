@@ -4,27 +4,27 @@ import { firestoreConnect } from 'react-redux-firebase';
 import PropTypes from 'prop-types';
 import swal from 'sweetalert'
 
-class NuevoSuscriptor extends Component {
+class NuevoUsuario extends Component {
     state = { 
         nombre: '',
         apellido: '',
-        carrera : '',
-        codigo : ''
+        contraseña : '',
+        email : ''
     }
 
     // Agrega un nuevo suscriptor a la base de datos
-    agregarSuscriptor = e => {
+    agregarUsuario = e => {
         e.preventDefault();
 
         // extraer los valores del state
-        const nuevoSuscriptor = this.state;
+        const nuevoUsuario = this.state;
 
         // extraer firestore  de props
         const { firestore, history } = this.props
 
         //Guardarlo en la base de datos
-        firestore.add({ collection : 'suscriptores' }, nuevoSuscriptor)
-            .then(() => history.push('/suscriptores') )
+        firestore.add({ collection : 'usuarios' }, nuevoUsuario)
+            .then(() => history.push('/usuarios') )
 
             swal("Good job!", "Has creado un nuevo Suscriptor!", "success");
     }
@@ -40,7 +40,7 @@ class NuevoSuscriptor extends Component {
         return ( 
             <div className="row">
                 <div className="col-12 mb-4">
-                    <Link to={'/suscriptores'} className="btn btn-secondary">
+                    <Link to={'/usuarios'} className="btn btn-secondary">
                         <i className="fas fa-arrow-circle-left"></i> {''}
                         Volver al Listado
                     </Link>
@@ -48,13 +48,13 @@ class NuevoSuscriptor extends Component {
                 <div className="col-12">
                     <h2>
                         <i className="fas fa-user-plus"></i> {''}
-                        Nuevo Suscriptor
+                        Nuevo Usuario
                     </h2>
 
                     <div className="row justify-content-center">
                         <div className="col-md-8 mt-5">
                             <form
-                                onSubmit={this.agregarSuscriptor}
+                                onSubmit={this.agregarUsuario}
                             >
                                 <div className="form-group">
                                     <label>Nombre:</label>
@@ -62,7 +62,7 @@ class NuevoSuscriptor extends Component {
                                         type="text"
                                         className="form-control"
                                         name="nombre"
-                                        placeholder="Nombre del Suscriptor"
+                                        placeholder="Nombre del Usuario"
                                         required
                                         onChange={this.leerDato}
                                         value={this.state.nombre}
@@ -70,47 +70,33 @@ class NuevoSuscriptor extends Component {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Apellido:</label>
+                                    <label>Email:</label>
                                     <input 
-                                        type="text"
+                                        type="email"
                                         className="form-control"
-                                        name="apellido"
-                                        placeholder="Apellido del Suscriptor"
+                                        name="email"
+                                        placeholder="Email del Usuario"
                                         required
                                         onChange={this.leerDato}
-                                        value={this.state.apellido}
+                                        value={this.state.email}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Carrera:</label>
+                                    <label>Contraseña:</label>
                                     <input 
-                                        type="text"
+                                        type="password"
                                         className="form-control"
-                                        name="carrera"
-                                        placeholder="Carrera del Suscriptor"
+                                        name="contraseña"
+                                        placeholder="Contraseña del Usuario"
                                         required
                                         onChange={this.leerDato}
-                                        value={this.state.carrera}
+                                        value={this.state.contraseña}
                                     />
                                 </div>
-
-                                <div className="form-group">
-                                    <label>Código:</label>
-                                    <input 
-                                        type="text"
-                                        className="form-control"
-                                        name="codigo"
-                                        placeholder="Código del Suscriptor"
-                                        required
-                                        onChange={this.leerDato}
-                                        value={this.state.codigo}
-                                    />
-                                </div>
-
                                 <input 
                                     type="submit"
-                                    value="Agregar Suscriptor"
+                                    value="Agregar Usuario"
                                     className="btn btn-success"
                                 />
                             </form>
@@ -122,8 +108,8 @@ class NuevoSuscriptor extends Component {
     }
 }
 
-NuevoSuscriptor.propTypes = {
+NuevoUsuario.propTypes = {
     firestore : PropTypes.object.isRequired
 }
  
-export default firestoreConnect()( NuevoSuscriptor );
+export default firestoreConnect()( NuevoUsuario );

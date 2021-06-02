@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { firebaseConnect } from 'react-redux-firebase';
 //import { from } from 'webpack-sources/lib/CompatSource';
 import PropTypes from 'prop-types';
+import Swal from 'sweetalert2'
+
 
 
 class Login extends Component {
@@ -28,7 +30,11 @@ class Login extends Component {
              password
          })
          .then(resultado => console.log('Ini Sesion'))
-         .catch(error=> console.log('Error')
+         .catch(error=> Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error de Mail o Contraseña!',
+          })
          )
          
      }

@@ -10,6 +10,7 @@
     "history": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-fontawesome": "^1.7.1",
     "react-redux": "^5.1.2",
     "react-redux-firebase": "^2.5.1",
     "react-router-dom": "^5.2.0",
@@ -17,6 +18,8 @@
     "redux": "^4.1.0",
     "redux-auth-wrapper": "^3.0.0",
     "redux-firestore": "^0.15.0",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.0.11",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
@@ -42,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

@@ -121,11 +121,11 @@ class Navbar extends Component {
 
           {usuarioAutenticado ? (
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
+              <l1 className="nav-item">
                 <a href="#!" className="nav-link">
                     { auth.email}
                 </a>
-              </li>
+              </l1>
               <li className="nav-item">
                 <button
                   type="button"
@@ -144,12 +144,6 @@ class Navbar extends Component {
                 >
                   Alerta
                 </button>
-              </li>
-
-              <li className="nav-item">
-                <Link to={"/usuarios"} className="nav-link">
-                  Usuarios
-                </Link>
               </li>
             </ul>
           ) : null }

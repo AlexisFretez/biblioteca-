@@ -7,48 +7,46 @@ import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import swal from 'sweetalert'
 
-class EditarSuscriptor extends Component {
+class EditarUsuario extends Component {
 
     // crear los refs
     nombreInput = React.createRef();
-    apellidoInput = React.createRef();
-    codigoInput = React.createRef();
-    carreraInput = React.createRef();
+    emailInput = React.createRef();
+    contraseñaInput = React.createRef();
 
     // Edita el Suscriptor en la base de datos
-    editarSuscriptor = e => {
+    editarUsuario = e => {
         swal("Good job!", "Editaste un Suscriptor!", "success");
         e.preventDefault();
 
         // crear el objeto que va a actualizar
-        const suscriptorActualizado = {
+        const usuarioActualizado = {
             nombre : this.nombreInput.current.value,
-            apellido : this.apellidoInput.current.value,
-            codigo : this.codigoInput.current.value,
-            carrera : this.carreraInput.current.value,
+            email : this.emailInput.current.value,
+            contraseña : this.contraseñaInput.current.value,
         }
         // extraer firestore, y history de props
-        const { suscriptor, firestore, history } = this.props;
+        const { usuario, firestore, history } = this.props;
         
         // almacenar en la base de datos con firestore
         firestore.update({
-            collection: 'suscriptores',
-            doc: suscriptor.id
-        }, suscriptorActualizado ).then(history.push('/suscriptores'));
+            collection: 'usuarios',
+            doc: usuario.id
+        }, usuarioActualizado ).then(history.push('/usuarios'));
 
     }
 
 
     render() { 
 
-        const { suscriptor } = this.props;
+        const { usuario} = this.props;
 
-        if(!suscriptor) return <Spinner />
+        if(!usuario) return <Spinner />
 
         return ( 
             <div className="row">
                 <div className="col-12 mb-4">
-                    <Link to={'/suscriptores'} className="btn btn-secondary">
+                    <Link to={'/usuarios'} className="btn btn-secondary">
                         <i className="fas fa-arrow-circle-left"></i> {''}
                         Volver al Listado
                     </Link>
@@ -56,13 +54,13 @@ class EditarSuscriptor extends Component {
                 <div className="col-12">
                     <h2>
                         <i className="fas fa-user"></i> {''}
-                        Editar Suscriptor
+                        Editar Usuario
                     </h2>
 
                     <div className="row justify-content-center">
                         <div className="col-md-8 mt-5">
                             <form
-                                onSubmit={this.editarSuscriptor}
+                                onSubmit={this.editarUsuario}
                             >
                                 <div className="form-group">
                                     <label>Nombre:</label>
@@ -70,55 +68,43 @@ class EditarSuscriptor extends Component {
                                         type="text"
                                         className="form-control"
                                         name="nombre"
-                                        placeholder="Nombre del Suscriptor"
+                                        placeholder="Nombre del Usuario"
                                         required
                                         ref={this.nombreInput}
-                                        defaultValue={suscriptor.nombre}
+                                        defaultValue={usuario.nombre}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Apellido:</label>
+                                    <label>Email:</label>
                                     <input 
                                         type="text"
                                         className="form-control"
-                                        name="apellido"
-                                        placeholder="Apellido del Suscriptor"
+                                        name="email"
+                                        placeholder="Email del Usuario"
                                         required
-                                        ref={this.apellidoInput}
-                                        defaultValue={suscriptor.apellido}
+                                        ref={this.emailInput}
+                                        defaultValue={usuario.email}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Carrera:</label>
+                                    <label>Contraseña:</label>
                                     <input 
                                         type="text"
                                         className="form-control"
-                                        name="carrera"
+                                        name="contraseña"
                                         placeholder="Carrera del Suscriptor"
                                         required
-                                        ref={this.carreraInput}
-                                        defaultValue={suscriptor.carrera}
+                                        ref={this.contraseñaInput}
+                                        defaultValue={usuario.contraseña}
                                     />
                                 </div>
 
-                                <div className="form-group">
-                                    <label>Código:</label>
-                                    <input 
-                                        type="text"
-                                        className="form-control"
-                                        name="codigo"
-                                        placeholder="Código del Suscriptor"
-                                        required
-                                        ref={this.codigoInput}
-                                        defaultValue={suscriptor.codigo}
-                                    />
-                                </div>
 
                                 <input 
                                     type="submit"
-                                    value="Editar Suscriptor"
+                                    value="Editar Usuario"
                                     className="btn btn-success"
                                 />
                             </form>
@@ -130,19 +116,19 @@ class EditarSuscriptor extends Component {
     }
 }
 
-EditarSuscriptor.propTypes = {
+EditarUsuario.propTypes = {
     firestore: PropTypes.object.isRequired
 }
  
 export default compose(
     firestoreConnect(props => [
         {
-            collection : 'suscriptores',
-            storeAs : 'suscriptor',
+            collection : 'usuarios',
+            storeAs : 'usuario',
             doc : props.match.params.id
         }
     ]), 
     connect(({ firestore: { ordered }}, props ) => ({
-        suscriptor : ordered.suscriptor && ordered.suscriptor[0]
+        usuario : ordered.usuario && ordered.usuario[0]
     }))
-)(EditarSuscriptor)
+)(EditarUsuario)

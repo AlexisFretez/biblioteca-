@@ -1,54 +1,58 @@
-import React from 'react';
-import { useState, ChangeEvent } from 'react';
+import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import FontAwesome from 'react-fontawesome';
 import Spinner from '../layout/Spinner';
 import swal from 'sweetalert'
 
 
-const Libros = ({libros, firestore}) => {
+//const Libros = ({libros, firestore}) => {
 
-   //Paginacion y busqueda
-   const [ currentPage, setCurrentPage ] = useState(0)
-   const [ search, setSearch ] = useState('');
-
-
-   console.log(currentPage);
-
-   const filteredLibros = (): Libros[] => {
-   
-       if( search.length === 0 ) 
-       return libros.slice(currentPage, currentPage +5);
-
-       //Si hay suscriptor 
-       const filtered = libros.filter( sus => sus.titulo.toLowerCase().includes( search.toLowerCase() ));
-       return filtered.slice(currentPage, currentPage +5);
-   
-   }
-
-   const Siguiente = () => {
-       //Este if Impide que pase al siguienbte si nom hay mas suscriptores
-       if(libros.filter( sus => sus.titulo.includes( search )).length > currentPage +5 )
-           setCurrentPage( currentPage + 5 );
-   }
+class Libros extends Component {
+    state = { 
+        noResultados : false,
+        busqueda : ''
+     }
 
 
-   const Anterior = () => {
-       if(currentPage > 0)
-       setCurrentPage( currentPage - 5 );
-}
+    //buscar Libro por Nombre
 
-const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-   setCurrentPage(0);
-   setSearch( target.value );
-}
- // Hastaa aca Paginacion 
+    buscarLibro = e => {
+        e.preventDefault();
+        //obtener el valor a buscar
+        const {busqueda} = this.state;
 
-    const eliminarLibro = id => {
+        
+
+        
+
+        //extraer firestore
+
+        const {firestore} = this.props;
+
+        const { libros } = this.props;
+
+        //hacer la consulta 
+
+        const coleccion = firestore.collection('libros');
+
+        const consulta = coleccion.where("titulo", "==", busqueda).get();
+
+        console.log(consulta); 
+
+        //leer los resultados
+    }
+     
+     //Almacenar el codigo en el state
+     leerDato = e => {
+        this.setState({
+            [e.target.name] : e.target.value
+        })
+    }
+     eliminarLibro (id, e)  {
+        const { firestore } = this.props;
         swal({
             title: "Are you sure?",
             text: "Once deleted, you will not be able to recover this file!",
@@ -73,7 +77,10 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         
         
     }
-
+    render() { 
+        const { libros } = this.props;
+        
+        const { firestore } = this.props;
     if(!libros) return <Spinner />
 
 
@@ -82,37 +89,41 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
             <div className="col-12 mb-4">
                 <Link to="/libros/nuevo" className="btn btn-success">
                     <i className="fas fa-plus"></i> {''}
-                    Nuevo Libross
+                    Nuevo Libro
                 </Link>
             </div>
+            
             <div className="col-md-8">
                 <h2>
                     <i className="fas fa-book"></i> {''}
                     Libros
                 </h2>
             </div>
-            
-            
-            <div class="btn-group">
-            <FontAwesome
-              className='search'
-              name='search'
-              size='3x'
-              style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',color:'lightblue',background: '#18bc9c', borderColor: "#18bc9c" }}
-            />
-                <input 
-                type="text"
-                className=""
-                placeholder="Buscar Alumno"
-                value={ search }
-                onChange={ e =>setSearch(e.target.value) }
-                />
-                <div class="input-group-append">
-                    <button id="show_password" class="btn btn-success" type="button" onclick="mostrarPassword()">
-                        <span class="fas fa-search"></span>
-                    </button>
-                </div>
-            </div>
+            <div className="text-center">
+                            <form
+                                onSubmit={this.buscarLibro}
+                                className="mb-4"
+                            >
+                                <legend className="color-primary text-center">
+                                    Buscar El Libro por Nombre
+                                </legend>
+                                <div className="form-group">
+                                    <input type="text"
+                                    name="busqueda"
+                                    className="form-control"
+                                    onChange={this.leerDato}
+                                    />
+                                </div>
+                                <input type="submit"
+                                value="Buscar Libro" className="btn btn-success btn-block"/>
+                            </form>
+                            {/* Muestra la ficha del alumno y el boton para solicitar el prestamo*/}
+                           
+
+                            {/* muestra un mensaje de no resultados */}
+                            
+                        </div>
+
             <table className="table table-striped mt-4">
                 <thead className="text-light bg-primary">
                     <tr>
@@ -126,7 +137,7 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
                 </thead>
 
                 <tbody>
-                    {filteredLibros().map(libro => (
+                    {libros.map(libro => (
                         <tr key={libro.id}>
                             <td>{libro.titulo}</td>
                             <td>{libro.ISBN}</td>
@@ -145,7 +156,7 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
                                 <button 
                                     type="button"
                                     className="btn btn-danger btn-block"
-                                    onClick={() => eliminarLibro(libro.id)}
+                                    onClick={(e) => this.eliminarLibro(libro.id, e)}
                                 >
                                     <i className="fas fa-trash-alt"></i> {''}
                                     Eliminar
@@ -155,26 +166,10 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
                         </tr>
                     ))}
                 </tbody>
-
-                <div style={{float: "right"}}>
-                    <button 
-                     onClick={Anterior}
-                    className="btn btn-primary"
-                    >
-                         Anteriores
-                    </button>
-                    &nbsp;
-            
-                    <button 
-                    className="btn btn-primary"
-                    onClick={ Siguiente }
-                    >
-                        Siguientes
-                    </button>
-                 </div>
             </table>
         </div>
      );
+     }
 }
 
 Libros.propTypes = {
@@ -188,3 +183,5 @@ export default compose(
         libros : state.firestore.ordered.libros
     }))
 )(Libros);
+
+

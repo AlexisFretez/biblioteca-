@@ -12,7 +12,7 @@ import Spinner from '../layout/Spinner';
 import swal from 'sweetalert'
 
 
-const Suscriptores = ({suscriptores, firestore}) => {
+const Usuarios = ({usuarios, firestore}) => {
 
 
     //Paginacion y busqueda
@@ -22,13 +22,13 @@ const Suscriptores = ({suscriptores, firestore}) => {
 
     console.log(currentPage);
 
-    const filteredSuscriptores = (): Suscriptor[] => {
+    const filteredUsuarios = (): Suscriptor[] => {
     
         if( search.length === 0 ) 
-        return suscriptores.slice(currentPage, currentPage +5);
+        return usuarios.slice(currentPage, currentPage +5);
 
         //Si hay suscriptor 
-        const filtered = suscriptores.filter( sus => sus.nombre.toLowerCase().includes( search.toLowerCase())||sus.apellido.toLowerCase().includes( search.toLowerCase())
+        const filtered = usuarios.filter( sus => sus.nombre.toLowerCase().includes( search.toLowerCase())||sus.email.toLowerCase().includes( search.toLowerCase())
         );
         
         return filtered.slice(currentPage, currentPage +5);
@@ -36,8 +36,8 @@ const Suscriptores = ({suscriptores, firestore}) => {
     }
 
     const Siguiente = () => {
-        //Este if Impide que pase al siguienbte si nom hay mas suscriptores
-        if(suscriptores.filter( sus => sus.nombre.includes( search )).length > currentPage +5 )
+        //Este if Impide que pase al siguienbte si nom hay mas usuarios
+        if(usuarios.filter( sus => sus.nombre.includes( search )).length > currentPage +5 )
             setCurrentPage( currentPage + 5 );
     }
 
@@ -53,7 +53,7 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
 }
   // Hastaa aca Paginacion 
 
-    if(!suscriptores) return <Spinner />;
+    if(!usuarios) return <Spinner />;
 
     // Eliminar Suscriptores
     const eliminarSuscriptor = id => {
@@ -90,16 +90,16 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         <div className="row">
             <div className="col-md-12 mb-4">
                 <Link
-                    to="/suscriptores/nuevo"
+                    to="/usuarios/nuevo"
                     className="btn btn-primary"
                 >
                     <i className="fas fa-plus"></i> {''}
-                    Nuevo Suscriptor
+                    Nuevo Usuario
                 </Link>
             </div>
             <div className="col-md-8">
                 <h2>
-                    <i className="fas fa-users"></i> Suscriptores
+                    <i className="fas fa-users"></i> Usuarios
                 </h2>
             </div>
             <hr/>
@@ -113,7 +113,7 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
                 <input 
                 type="text"
                 className=""
-                placeholder="Buscar Alumno"
+                placeholder="Buscar Usuario"
                 value={ search }
                 onChange={ e =>setSearch(e.target.value) }
                 />
@@ -124,19 +124,19 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
                 <thead className="text-light bg-primary">
                     <tr>
                         <th>Nombre</th>
-                        <th>Carrera</th>
+                        <th>Email</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {filteredSuscriptores().map(suscriptor => (
-                        <tr key={suscriptor.id}>
-                            <td>{suscriptor.nombre} {suscriptor.apellido}</td>
-                            <td>{suscriptor.carrera}</td>
+                    {filteredUsuarios().map(usuario => (
+                        <tr key={usuario.id}>
+                            <td>{usuario.nombre} {usuario.apellido}</td>
+                            <td>{usuario.email}</td>
                             <td>
                                 <Link
-                                    to={`/suscriptores/mostrar/${suscriptor.id}`}
+                                    to={`/usuarios/mostrar/${usuario.id}`}
                                     className="btn btn-success btn-block"
                                 >
                                     <i className="fas fa-angle-double-right"></i> {''}
@@ -147,7 +147,7 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
                                 <button
                                     type="button"
                                     className="btn btn-danger btn-block"
-                                    onClick={ () => eliminarSuscriptor(suscriptor.id) }
+                                    onClick={ () => eliminarSuscriptor(usuario.id) }
                                 >
                                     <i className="fas fa-trash-alt"></i> {''}
                                     Eliminar
@@ -180,15 +180,15 @@ const onSearchChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         </div>
      );
 }
-Suscriptores.propTypes = {
+Usuarios.propTypes = {
     firestore : PropTypes.object.isRequired,
-    suscriptores : PropTypes.array
+    usuarios : PropTypes.array
 }
 
  
 export default compose(
-    firestoreConnect([{ collection : 'suscriptores' }]),
+    firestoreConnect([{ collection : 'usuarios' }]),
     connect((state, props) => ({
-        suscriptores : state.firestore.ordered.suscriptores
+        usuarios : state.firestore.ordered.usuarios
     }))
-)(Suscriptores);
+)(Usuarios);
